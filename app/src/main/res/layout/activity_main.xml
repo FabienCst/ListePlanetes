@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/primary_layout">
 
     <ListView
         android:id="@+id/listView"
@@ -16,6 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:orientation="horizontal">
+        android:id="@+id/secondary_layout">
 
         <Button
             android:id="@+id/verifier_btn"

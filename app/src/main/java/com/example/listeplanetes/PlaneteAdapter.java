@@ -6,17 +6,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class PlaneteAdapter extends BaseAdapter {
 
+    private Data datas;
     private ArrayList<String> planetes;
     Context MainActivity;
+    View itemView;
 
     public PlaneteAdapter(ArrayList<String> planetes,Context MainActivity) {
         this.planetes = planetes;
@@ -39,7 +45,7 @@ public class PlaneteAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View itemView = convertView;
+        itemView = convertView;
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater)    MainActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             itemView = inflater.inflate(R.layout.listitem, null);
@@ -52,7 +58,7 @@ public class PlaneteAdapter extends BaseAdapter {
         nomPlanete.setText(planetes.get(position));
 
         //  installer l'adaptateur pour la liste déroulante (spinner)
-        Data datas = new Data();
+        datas = new Data();
         final ArrayAdapter<String> spinadapter = new ArrayAdapter<String>(MainActivity, android.R.layout.simple_spinner_item, datas.getPlanetesSize());
         spinadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinadapter);
@@ -63,6 +69,24 @@ public class PlaneteAdapter extends BaseAdapter {
                 CheckBox checkBox = (CheckBox) compoundButton.findViewById(R.id.checkbox);
                 spinner.setEnabled(!checkBox.isChecked());
                 spinadapter.notifyDataSetChanged();
+            }
+        });
+
+        checkBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LinearLayout parent = (LinearLayout) checkBox.getParent().getParent().getParent();
+                ListView listView = parent.findViewById(R.id.listView);
+                Button button = parent.findViewById(R.id.verifier_btn);
+                if (checkBox.isChecked()) {
+                    boolean isEnabled = true;
+                    for (int i = 0; i < planetes.size(); i++) {
+                        View item = listView.getChildAt(i);
+                        CheckBox checkBox = item.findViewById(R.id.checkbox);
+                        if (!checkBox.isChecked()) isEnabled = false;
+                    }
+                    if (isEnabled) button.setEnabled(true);
+                } else button.setEnabled(false);
             }
         });
 

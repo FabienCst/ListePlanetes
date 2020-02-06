@@ -2,6 +2,7 @@ package com.example.listeplanetes;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ClipData;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -23,26 +25,38 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> planetes;
     ListView listview;
     PlaneteAdapter adapter;
-    Button verifier = null;
+    Button verifier;
+    Data datas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Data datas = new Data();
+        datas = new Data();
         listview = (ListView) findViewById(R.id.listView);
         adapter = new PlaneteAdapter(datas.getPlanetesName(),MainActivity.this);
         listview.setAdapter(adapter);
 
         verifier = (Button) findViewById(R.id.verifier_btn);
         verifier.setOnClickListener(verifierListener);
+        verifier.setEnabled(false);
     }
 
     private View.OnClickListener verifierListener = new View.OnClickListener() {
 
         @Override
         public void onClick(View v) {
+            for (int i = 0; i < datas.getPlanetesName().size(); i++) {
+                // View x = (View) listview.getAdapter().getView(0,null,listview);
+                View item = (View) listview.getChildAt(i);
+                Spinner sp = (Spinner) item.findViewById(R.id.spinner);
 
+                if (!sp.getSelectedItem().toString().equals(datas.getPlanetesSize()[i])) {
+                    popUp("Vous n'avez pas les bonnes propositions");
+                    return;
+                }
+            }
+            popUp("Bien joué ! Vous avez les bons résultats");
         }
     };
 
@@ -59,4 +73,8 @@ public class MainActivity extends AppCompatActivity {
         planetes.add("Neptune");
         planetes.add("Pluton");
     }*/
+
+    public void popUp(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+    }
 }
